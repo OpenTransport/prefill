@@ -1,8 +1,6 @@
 # Prefill #
 
-Prefill is a javascript library to guess what an end-user wants to have filled out in a journey planner form.
-
-The goal of prefill is to fill the "from" and "to" box in online journey planners so the user only has to check the fields and click "ok".
+Prefill is a javascript library to guess what an end-user wants to look up. The guess is based upon: current location and the time.
 
 ## Why did I make this
 
@@ -15,7 +13,7 @@ We need the history in a certain format. Without further ado, this is an example
 ```javascript
 history = [
     {
-        "datetime" : "2013-08-31T2:20Z",//iso8601
+        "datetime" : "2013-08-31T2:20Z", // iso8601
         "location" : { // the location of the user when it performed the action
             "longitude" : 3.14,
             "latitude" : 51.2
@@ -35,7 +33,7 @@ p = new Prefill();
 //this is a quite intense operation depending on how fast our neural network learns (oh yes, we're using a neural network)
 p.prepare(history, function(){
     //this operation is okay
-    result = p.guess("2013-08-31T2:20Z","longitude" : 3.14,"latitude" : 51.2);
+    result = p.guess("2013-08-31T2:20Z", 3.14, 51.2);
     console.log("I think " + result.to + " and " + result.from + " are the desired values");
 });
 
@@ -53,8 +51,6 @@ The history will be used to get all the necssary variables to train a neural net
  * round(longitude,2)*100 . round(latitude,2) of the user
 
 and of course the "from" and "to" are included when training.
-
-Since the history will probably contain only 10 to 20 from/to stop areas, the neural network might be quite precise.
 
 For the neural network, we will use [brain.js](https://github.com/harthur/brain).
 
