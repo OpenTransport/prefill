@@ -1,0 +1,15 @@
+{
+    "name": "Prefill",
+    "description": "Front-end library for journey planners",
+    "version": "0.0.1",
+    "author": "Pieter Colpaert",
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/pietercolpaert/prefill.git"
+    },
+    "main": "./main.js",
+    "dependencies": {
+        "brain" : ">=0.6.1"
+    },
+    "keywords": ["neural network", "transport", "prefill"]
+}
