@@ -8,6 +8,8 @@ Because a lot of journey planners exist, yet they all fail at delivering the sim
 
 ## Usage ##
 
+### General ###
+
 We need the history in a certain format. Without further ado, this is an example of the only format we accept at this moment:
 
 ```javascript
@@ -38,6 +40,27 @@ p.prepare(history, function(){
 });
 
 ```
+
+### Give it a try using node ###
+
+In this repository, there is a test.js. If you have node.js installed and if you performed an `npm install` in this directory, you can run the test by launching:
+
+```bash
+./test.js
+```
+
+### Use it in a browser ###
+
+Sorry, you will still need node.
+
+* Step 0: clone this repository
+* Step 1: `npm install`
+* Step 2: (sudo) `npm install -g browsify` (if you don't have browserify installed yet)
+* Step 3: `browsify js/prefill.js -o js/prefill_build.js`
+* Step 4: use it in your HTML: `<script src="js/prefill_build.js"></script>`
+* Step 5: Create an object somewhere: `var p = new Prefill();`
+
+For the lazy, you can find a ready made build in the build directory.
 
 ## How it works ##
 

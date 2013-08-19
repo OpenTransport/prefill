@@ -1,6 +1,6 @@
 var brain = require("brain");
 
-var Prefill = function(){
+Prefill = function(){
     //all the possible stop areas which may turn up in a result
     this.stop_areas = {};
     this.history = [];

@@ -1,0 +1,97 @@
+<!--
+ © 2013 OKFN - CC0
+ This is an example of how to use Prefill in your applications
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="build/bundle.js"></script>
+    <title>A demo of Prefill.js</title>
+  </head>
+  <body>
+    <header>
+      <h1>Fill out a Belgian railway station</h1>
+    </header>
+    <form>
+      <label>From:</label><input type="text" id="from"></input><br/>
+      <label>To:</label><input type="text" id="to"></input><br/>
+      <input type="button" id="submit"/>
+    </form>
+    <div id="result">
+    </div>
+    <script>
+$("#submit").click(function(){
+    var from = $("#from").val();
+    var to = $("#to").val();
+    getLocation(function(location){
+        var now = new Date();
+        var history = [];
+        if(typeof localStorage["planner_history"] !== "undefined"){
+            history = JSON.parse(localStorage["planner_history"]);
+        }
+        history[history.length] = {
+            datetime : now.toISOString(),
+            location : location,
+            from : from,
+            to : to
+        };
+        
+        localStorage["planner_history"] = JSON.stringify(history);
+        console.log(localStorage["planner_history"]);
+    });
+});
+
+/**
+ * on load, this function will prefill the to and the from field
+ */
+$(document).ready(function(){
+    getLocation(function(location){
+        var now = new Date();
+        var p = new Prefill();
+        //get the history from local storage
+        var history = [];
+        if(typeof localStorage["planner_history"] !== "undefined"){
+            history = JSON.parse(localStorage["planner_history"]);
+            //prepare the prefill
+            p.prepare(history,function(){
+                console.log(location);
+                result = p.guess(now,location.longitude, location.latitude);
+                $('#to').val(result.to);
+                $('#from').val(result.from);
+            });
+        }else{
+            console.log("No good learning collection found");
+        }
+    });
+});
+
+// Get the HTML5 location
+var getLocation = function(callback){
+    if (navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(function(p){
+            var result = {
+                "longitude": p.coords.longitude,
+                "latitude" : p.coords.latitude
+            };
+            callback(result);
+        }, function(){
+            console.log("Could not retrieve current location.");
+            callback({
+                longitude : 0,
+                latitude : 0
+            });
+        });
+    }
+    else{
+        console.info("Geolocation is not supported by this browser.");
+        callback({
+            longitude : 0,
+            latitude : 0
+        });
+    }
+}
+    </script>
+  </body>
+</html>

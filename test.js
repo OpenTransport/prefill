@@ -2,8 +2,7 @@
 // This is a node.js application. Run with ./main.js
 
 // It is example code for Prefill.js
-var prefill = require("./prefill.js");
-
+var prefill = require("./js/prefill.js");
 //Dummy data
 var history = [
     {
