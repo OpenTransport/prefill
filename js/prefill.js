@@ -19,7 +19,6 @@ Prefill = function(){
             var datetime = new Date(this.history[i].datetime);
             this.resetStopAreas();
             this.stop_areas[this.history[i].from + "|" + this.history[i].to ] = 1;
-            //todo: need way better geohash
             var time = parseInt(datetime.getHours() + "" + datetime.getMinutes());
             
             this.lc[i] = {
