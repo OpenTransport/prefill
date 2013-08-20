@@ -16,6 +16,9 @@
         <h1>Fill out 2 Belgian railway stations</h1>
       </header>
       <form>
+        <label>Load a profile: </label>
+        <input type="button" id="commuter" value="Commuter"/>
+        <br/>
         <label>From</label><br/><input type="text" id="from"></input><br/>
         <label>To</label><br/><input type="text" id="to"></input><br/>
         <input type="button" id="submit" value="Go!"/>
@@ -24,7 +27,21 @@
     <div id="result" align="center">
     </div>
     <script>
+$("#commuter").click(function(){
+    $.ajax("examples/commuter.json", {
+        success:function(data){
+            console.log(data);
+            localStorage["planner_history"] = JSON.stringify(data);
+            window.alert("The commuter commutes from Ghent to Brussels everyday. In the weekend, (s)he does random trips.");
+            window.location.reload(true);
+        }
+    });
+
+
+});
+
 $("#submit").click(function(){
+    $("#result").html("Loading...");
     var from = $("#from").val();
     var to = $("#to").val();
     $.ajax("http://api.irail.be/connections/", {

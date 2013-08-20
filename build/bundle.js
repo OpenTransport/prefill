@@ -1,7 +1,8 @@
 ;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var brain = require("brain");
 
-Prefill = function(){
+Prefill = function(options){
+    this.options = options || {};
     //all the possible stop areas which may turn up in a result
     this.stop_areas = {};
     this.history = [];
@@ -9,6 +10,19 @@ Prefill = function(){
     this.lc = [];
     // neural network
     this.net = {};
+
+    this.normalizeInput = function(datetime, location){
+        //concatenate time in 1 integer
+        var time = parseInt(datetime.getHours() + "" + datetime.getMinutes() / 60 * 100);
+        return {
+            // The day of the week /6 (Sunday = 0, Monday= 1/6, Tuesday = 1/3 ... Saturday = 1
+            day : datetime.getDay() / 6,
+            // The time of the day can be divided by 2400
+            time: time / 2400,
+            longitude: (location.longitude + 90) / 180,
+            latitude: (location.latitude + 90) / 180,
+        }
+    }
 
     this.prepare = function (history_, callback){
         this.history = history_;
@@ -18,28 +32,33 @@ Prefill = function(){
             var from = this.history[i].from;
             var to = this.history[i].to;
             var datetime = new Date(this.history[i].datetime);
-            this.resetStopAreas();
-            this.stop_areas[this.history[i].from + "|" + this.history[i].to ] = 1;
-            //todo: need way better geohash
-            var time = parseInt(datetime.getHours() + "" + datetime.getMinutes());
-            
+            //set the found route to 1 for this situation
+            var out = {};
+            out[from + "|" + to] = 1;
+            //add the in and outs to the learning collection
             this.lc[i] = {
-                "input": [datetime.getDay(), time,this.history[i].location.longitude,this.history[i].location.latitude],
-                "output" : this.stop_areas
+                "input": this.normalizeInput(datetime,this.history[i].location ),
+                "output" : out
             }
         }
-
         //this is a heavy operation
-        console.info("Next info message are metrics on how good we trained our network");
-        console.info(this.net.train(this.lc));
+        if(this.options.logging)
+            console.info("Metrics on how good we trained our network:");
+        var feedback = this.net.train(this.lc, {
+            errorThresh: 0.05,  // error threshold to reach
+            iterations: 20000,   // maximum training iterations
+            log: this.options.logging,          // console.log() progress periodically
+            logPeriod: 10        // number of iterations between logging
+        });
+
+        if(this.options.logging)
+            console.info(feedback);
         callback();
     }
 
     this.guess = function(datetime, longitude, latitude){
-        var time = parseInt(datetime.getHours() + "" + datetime.getMinutes());
-        var output = this.net.run([datetime.getDay(), time, longitude, latitude]);
-
-        console.log("Next info message will be the guesses of the neural network:");
+        var output = this.net.run(this.normalizeInput(datetime,{"longitude": longitude, "latitude": latitude}));
+        console.log("Result of the neural network:");
         console.log(output);
         //find the best result
         var max = 0;
@@ -53,15 +72,6 @@ Prefill = function(){
         return {
             from : winners[0],
             to : winners[1]
-        }
-    }
-    
-    /**
-     * Sets all to 0
-     */
-    this.resetStopAreas = function(){
-        for(var i = 0 ; i < this.history.length ; i ++){
-            this.stop_areas[this.history[i].from + "|" + this.history[i].to] = 0;
         }
     }
 }
