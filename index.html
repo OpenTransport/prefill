@@ -22,6 +22,7 @@
         <input type="button" id="clear" value="Clear history"/>
         <br/>
         <label>From</label><br/><input type="text" id="from"></input><br/>
+        <input type="button" id="switch" value="↓↑"/><br/>
         <label>To</label><br/><input type="text" id="to"></input><br/>
         <input type="button" id="submit" value="Go!"/>
       </form>
@@ -43,7 +44,11 @@ $("#commuter").click(function(){
 $("#clear").click(function(){
     localStorage.removeItem("planner_history");
 });
-
+$("#switch").click(function(){
+    var temp = $("#from").val();
+    $("#from").val($("#to").val());
+    $("#to").val(temp);
+});
 $("#submit").click(function(){
     $("#result").html("Loading...");
     var from = $("#from").val();
