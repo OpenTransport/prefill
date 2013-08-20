@@ -19,6 +19,8 @@
         <label>Load a profile: </label>
         <input type="button" id="commuter" value="Commuter"/>
         <br/>
+        <input type="button" id="clear" value="Clear history"/>
+        <br/>
         <label>From</label><br/><input type="text" id="from"></input><br/>
         <label>To</label><br/><input type="text" id="to"></input><br/>
         <input type="button" id="submit" value="Go!"/>
@@ -36,8 +38,10 @@ $("#commuter").click(function(){
             window.location.reload(true);
         }
     });
+});
 
-
+$("#clear").click(function(){
+    localStorage.removeItem("planner_history");
 });
 
 $("#submit").click(function(){
