@@ -49,7 +49,9 @@ $("#switch").click(function(){
     $("#from").val($("#to").val());
     $("#to").val(temp);
 });
-$("#submit").click(function(){
+$("#submit").click(fetchResults);
+
+var fetchResults = function(){
     $("#result").html("Loading...");
     var from = $("#from").val();
     var to = $("#to").val();
@@ -85,7 +87,7 @@ $("#submit").click(function(){
         localStorage["planner_history"] = JSON.stringify(history);
         console.log(localStorage["planner_history"]);
     });
-});
+};
 
 /**
  * on load, this function will prefill the to and the from field
@@ -105,6 +107,7 @@ $(document).ready(function(){
                 $('#to').val(result.to);
                 $('#from').val(result.from);
             });
+            fetchResults();
         }else{
             console.log("No good learning collection found");
         }
