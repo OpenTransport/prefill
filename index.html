@@ -49,7 +49,7 @@ $("#switch").click(function(){
     $("#from").val($("#to").val());
     $("#to").val(temp);
 });
-$("#submit").click(fetchResults);
+$("#submit").click(fetchResults());
 
 var fetchResults = function(){
     $("#result").html("Loading...");
