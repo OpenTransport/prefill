@@ -49,7 +49,6 @@ $("#switch").click(function(){
     $("#from").val($("#to").val());
     $("#to").val(temp);
 });
-$("#submit").click(fetchResults());
 
 var fetchResults = function(){
     $("#result").html("Loading...");
@@ -88,6 +87,8 @@ var fetchResults = function(){
         console.log(localStorage["planner_history"]);
     });
 };
+
+$("#submit").click(fetchResults);
 
 /**
  * on load, this function will prefill the to and the from field
