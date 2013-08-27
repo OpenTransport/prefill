@@ -51,16 +51,21 @@ In this repository, there is a test.js. If you have node.js installed and if you
 
 ### Use it in a browser ###
 
-Sorry, you will still need node.
+For the lazy or for those who just want to use prefill.js, you can find a ready made build in the build directory over here: https://github.com/OpenTransport/prefill/blob/master/build/bundle.js then,
+* Step 1: load the script somewhere in <head>: `<script src="js/prefill.js"></script>` or whatever you renamed to bundle.js file to.
+* Step 2: Create an object somewhere: `var p = new Prefill();`
+
+
+For those who want to develop further and use it in the browser, sorry, you will still need node.
 
 * Step 0: clone this repository
 * Step 1: `npm install`
 * Step 2: (sudo) `npm install -g browsify` (if you don't have browserify installed yet)
-* Step 3: `browsify js/prefill.js -o js/prefill_build.js`
-* Step 4: use it in your HTML: `<script src="js/prefill_build.js"></script>`
+* Step 3 option a: `make` (there's a makefile which atm will perform option b for you)
+* Step 3 option b: `browsify js/prefill.js -o build/bundle.js`
+* Step 4: use it in your HTML: `<script src="build/bundle.js"></script>`
 * Step 5: Create an object somewhere: `var p = new Prefill();`
 
-For the lazy, you can find a ready made build in the build directory.
 
 ## How it works ##
 
